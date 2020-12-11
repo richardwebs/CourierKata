@@ -14,6 +14,8 @@ namespace CourierKata.WebAPI
 {
     public class Startup
     {
+        private const string XoriginPolicy = "X-OriginPolicy";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -25,6 +27,16 @@ namespace CourierKata.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddCors(x =>
+            {
+                x.AddPolicy(XoriginPolicy, y =>
+                {
+                    y.AllowAnyOrigin();
+                    y.AllowAnyHeader();
+                    y.AllowAnyMethod();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
