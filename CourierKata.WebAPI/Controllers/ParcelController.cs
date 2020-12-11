@@ -1,24 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CourierKata.WebAPI.Models;
+using CourierKata.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace CourierKata.WebAPI.Controllers
 {
     public interface IParcelController
     {
-        Task<DateTime> Test();
+        DateTime Test();
+        ShippingResponse CalculateShippingCost(ShippingRequest request);
     }
     
     [ApiController]
     [Route("[controller]")]
     public class ParcelController : ControllerBase, IParcelController
     {
-        [HttpGet, Route("Test")]
-        public async Task<DateTime> Test()
+        private readonly IParcelService _service;
+
+        public ParcelController(IParcelService service)
         {
-            return await Task.Run(() => DateTime.UtcNow);
+            _service = service;
+        }
+        
+        [HttpGet, Route("Test")]
+        public DateTime Test()
+        {
+            return DateTime.UtcNow;
+        }
+
+        [HttpPost, Route("GetShippingCost")]
+        public ShippingResponse CalculateShippingCost(ShippingRequest request)
+        {
+            return _service.CalculateShippingCost(request);
         }
     }
 }
