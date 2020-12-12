@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CourierKata.WebAPI.Models;
 using System.Linq;
-using System.Threading.Tasks;
-using CourierKata.WebAPI.Models;
 
 namespace CourierKata.WebAPI.Services
 {
@@ -22,7 +19,28 @@ namespace CourierKata.WebAPI.Services
 
         public ShippingResponse CalculateShippingCost(ShippingRequest request)
         {
-            return new ShippingResponse();
+            var parcels = request.Parcels.Select(GetOutputParcel).ToArray();
+            var totalCost = parcels.Sum(x => x.Cost);
+            return new ShippingResponse{ 
+                ClientId = request.ClientId, 
+                Parcels = parcels, 
+                TotalCost = totalCost
+            };
+        }
+
+        private OutputParcel GetOutputParcel(InputParcel input)
+        {
+            var size = _helper.GetParcelSizeFromDimensions(input.WidthCm, input.HeightCm, input.LengthCm);
+            var cost = _helper.CalculateCostFromSize(size);
+            return new OutputParcel
+            {
+                ParcelId = input.ParcelId, 
+                WidthCm = input.WidthCm, 
+                HeightCm = input.HeightCm, 
+                LengthCm = input.LengthCm, 
+                ParcelSizeId = size,
+                Cost = cost
+            };
         }
     }
 }
