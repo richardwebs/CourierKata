@@ -34,11 +34,13 @@ namespace CourierKata.WebAPI.Services
 
         private OutputParcel GetOutputParcel(InputParcel input)
         {
-            const int costPerKgOverweight = 2;
+            var isExtraHeavy = _helper.IsExtraHeavy(input.WeightKg);
+            var costPerKgOverweight = isExtraHeavy ? 1 : 2;
+            var minCostFromWeight = isExtraHeavy ? 50 : 0;
             var size = _helper.GetParcelSizeFromDimensions(input.WidthCm, input.HeightCm, input.LengthCm);
             var costFromSize = _helper.GetCostFromSize(size);
             var weightLimitKg = _helper.GetWeightLimitPerSize(size);
-            var costFromWeight = _helper.GetCostFromWeight(input.WeightKg, weightLimitKg, costPerKgOverweight);
+            var costFromWeight = _helper.GetCostFromWeight(input.WeightKg, weightLimitKg, costPerKgOverweight, minCostFromWeight);
             var totalCost = costFromSize + costFromWeight;
             return new OutputParcel
             {
@@ -48,8 +50,11 @@ namespace CourierKata.WebAPI.Services
                 LengthCm = input.LengthCm,
                 WeightKg = input.WeightKg,
                 ParcelSizeId = size,
-                Cost = totalCost
+                Cost = totalCost,
+                IsExtraHeavy = isExtraHeavy
             };
         }
+
+
     }
 }

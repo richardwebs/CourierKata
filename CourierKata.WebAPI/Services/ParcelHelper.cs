@@ -9,6 +9,8 @@ namespace CourierKata.WebAPI.Services
         int GetCostFromSize(ParcelSizeEnum size);
         int GetWeightLimitPerSize(ParcelSizeEnum size);
         int GetCostFromWeight(int actualWeightKg, int weightLimitKg, int costPerKgOverweight);
+        int GetCostFromWeight(int actualWeightKg, int weightLimitKg, int costPerKgOverweight, int minCost);
+        bool IsExtraHeavy(int weightKg);
     }
 
     public class ParcelHelper : IParcelHelper
@@ -49,6 +51,18 @@ namespace CourierKata.WebAPI.Services
         {
             if (actualWeightKg <= weightLimitKg) return 0;
             return (actualWeightKg - weightLimitKg) * costPerKgOverweight;
+        }
+
+        public int GetCostFromWeight(int actualWeightKg, int weightLimitKg, int costPerKgOverweight, int minCost)
+        {
+            var excessWeight = actualWeightKg - weightLimitKg;
+            if (excessWeight <= 0) return 0;
+            return (excessWeight * costPerKgOverweight) + minCost;
+        }
+
+        public bool IsExtraHeavy(int weightKg)
+        {
+            return weightKg > 50;
         }
     }
 }
