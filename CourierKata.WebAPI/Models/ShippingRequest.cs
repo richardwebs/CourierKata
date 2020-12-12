@@ -9,5 +9,7 @@ namespace CourierKata.WebAPI.Models
         public Guid ClientId { get; set; }
         [Required]
         public InputParcel[] Parcels { get; set; }
+        [Required]
+        public bool IncludeSpeedyShipping { get; set; }
     }
 }
