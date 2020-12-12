@@ -5,7 +5,7 @@ namespace CourierKata.WebAPI.Services
 {
     public interface IParcelService
     {
-        ShippingResponse CalculateShippingCost(ShippingRequest request);
+        ShippingResponse GetShippingCost(ShippingRequest request);
     }
 
     public class ParcelService : IParcelService
@@ -17,29 +17,38 @@ namespace CourierKata.WebAPI.Services
             _helper = helper;
         }
 
-        public ShippingResponse CalculateShippingCost(ShippingRequest request)
+        public ShippingResponse GetShippingCost(ShippingRequest request)
         {
             var parcels = request.Parcels.Select(GetOutputParcel).ToArray();
-            var totalCost = parcels.Sum(x => x.Cost);
+            var parcelCost = parcels.Sum(x => x.Cost);
+            var speedyShippingCost = request.IncludeSpeedyShipping ? parcelCost : 0;
+            var totalCost = speedyShippingCost + parcelCost;
             return new ShippingResponse{ 
                 ClientId = request.ClientId, 
+                IncludeSpeedyShipping = request.IncludeSpeedyShipping,
                 Parcels = parcels, 
-                TotalCost = totalCost
+                TotalCost = totalCost,
+                SpeedyShippingCost = speedyShippingCost
             };
         }
 
         private OutputParcel GetOutputParcel(InputParcel input)
         {
+            const int costPerKgOverweight = 2;
             var size = _helper.GetParcelSizeFromDimensions(input.WidthCm, input.HeightCm, input.LengthCm);
-            var cost = _helper.CalculateCostFromSize(size);
+            var costFromSize = _helper.GetCostFromSize(size);
+            var weightLimitKg = _helper.GetWeightLimitPerSize(size);
+            var costFromWeight = _helper.GetCostFromWeight(input.WeightKg, weightLimitKg, costPerKgOverweight);
+            var totalCost = costFromSize + costFromWeight;
             return new OutputParcel
             {
                 ParcelId = input.ParcelId, 
                 WidthCm = input.WidthCm, 
                 HeightCm = input.HeightCm, 
-                LengthCm = input.LengthCm, 
+                LengthCm = input.LengthCm,
+                WeightKg = input.WeightKg,
                 ParcelSizeId = size,
-                Cost = cost
+                Cost = totalCost
             };
         }
     }

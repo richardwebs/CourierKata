@@ -6,7 +6,9 @@ namespace CourierKata.WebAPI.Services
     public interface IParcelHelper
     {
         ParcelSizeEnum GetParcelSizeFromDimensions(int widthCm, int heightCm, int lengthCm);
-        int CalculateCostFromSize(ParcelSizeEnum size);
+        int GetCostFromSize(ParcelSizeEnum size);
+        int GetWeightLimitPerSize(ParcelSizeEnum size);
+        int GetCostFromWeight(int actualWeightKg, int weightLimitKg, int costPerKgOverweight);
     }
 
     public class ParcelHelper : IParcelHelper
@@ -19,7 +21,7 @@ namespace CourierKata.WebAPI.Services
             return ParcelSizeEnum.ExtraLarge;
         }
 
-        public int CalculateCostFromSize(ParcelSizeEnum size)
+        public int GetCostFromSize(ParcelSizeEnum size)
         {
             return size switch
             {
@@ -29,6 +31,24 @@ namespace CourierKata.WebAPI.Services
                 ParcelSizeEnum.ExtraLarge => 25,
                 _ => throw new Exception($"Unhandled size: {size}"),
             };
+        }
+
+        public int GetWeightLimitPerSize(ParcelSizeEnum size)
+        {
+            return size switch
+            {
+                ParcelSizeEnum.Small => 1,
+                ParcelSizeEnum.Medium => 3,
+                ParcelSizeEnum.Large => 6,
+                ParcelSizeEnum.ExtraLarge => 10,
+                _ => throw new Exception($"Unhandled size: {size}"),
+            };
+        }
+
+        public int GetCostFromWeight(int actualWeightKg, int weightLimitKg, int costPerKgOverweight)
+        {
+            if (actualWeightKg <= weightLimitKg) return 0;
+            return (actualWeightKg - weightLimitKg) * costPerKgOverweight;
         }
     }
 }

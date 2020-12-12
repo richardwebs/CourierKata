@@ -13,5 +13,7 @@ namespace CourierKata.WebAPI.Models
         public int HeightCm { get; set; }
         [Required]
         public int LengthCm { get; set; }
+        [Required]
+        public int WeightKg { get; set; }
     }
 }

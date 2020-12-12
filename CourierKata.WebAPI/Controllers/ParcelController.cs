@@ -8,7 +8,7 @@ namespace CourierKata.WebAPI.Controllers
     public interface IParcelController
     {
         DateTime Test();
-        ShippingResponse CalculateShippingCost(ShippingRequest request);
+        ShippingResponse GetShippingCost(ShippingRequest request);
     }
     
     [ApiController]
@@ -29,9 +29,9 @@ namespace CourierKata.WebAPI.Controllers
         }
 
         [HttpPost, Route("GetShippingCost")]
-        public ShippingResponse CalculateShippingCost(ShippingRequest request)
+        public ShippingResponse GetShippingCost(ShippingRequest request)
         {
-            return _service.CalculateShippingCost(request);
+            return _service.GetShippingCost(request);
         }
     }
 }
