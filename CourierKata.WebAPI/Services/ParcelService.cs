@@ -1,11 +1,10 @@
 ﻿using CourierKata.WebAPI.Models;
-using System.Linq;
 
 namespace CourierKata.WebAPI.Services
 {
     public interface IParcelService
     {
-        ShippingResponse GetShippingCost(ShippingRequest request);
+        OutputParcel GetParcelCost(InputParcel input);
     }
 
     public class ParcelService : IParcelService
@@ -17,44 +16,26 @@ namespace CourierKata.WebAPI.Services
             _helper = helper;
         }
 
-        public ShippingResponse GetShippingCost(ShippingRequest request)
+        public OutputParcel GetParcelCost(InputParcel input)
         {
-            var parcels = request.Parcels.Select(GetOutputParcel).ToArray();
-            var parcelCost = parcels.Sum(x => x.Cost);
-            var speedyShippingCost = request.IncludeSpeedyShipping ? parcelCost : 0;
-            var totalCost = speedyShippingCost + parcelCost;
-            return new ShippingResponse{ 
-                ClientId = request.ClientId, 
-                IncludeSpeedyShipping = request.IncludeSpeedyShipping,
-                Parcels = parcels, 
-                TotalCost = totalCost,
-                SpeedyShippingCost = speedyShippingCost
-            };
-        }
-
-        private OutputParcel GetOutputParcel(InputParcel input)
-        {
-            var isExtraHeavy = _helper.IsExtraHeavy(input.WeightKg);
-            var costPerKgOverweight = isExtraHeavy ? 1 : 2;
-            var minCostFromWeight = isExtraHeavy ? 50 : 0;
-            var size = _helper.GetParcelSizeFromDimensions(input.WidthCm, input.HeightCm, input.LengthCm);
-            var costFromSize = _helper.GetCostFromSize(size);
-            var weightLimitKg = _helper.GetWeightLimitPerSize(size);
-            var costFromWeight = _helper.GetCostFromWeight(input.WeightKg, weightLimitKg, costPerKgOverweight, minCostFromWeight);
-            var totalCost = costFromSize + costFromWeight;
+            var sizeClassId = _helper.GetSizeClassId(input.WidthCm, input.HeightCm, input.LengthCm);
+            var weightClassId = _helper.GetWeightClassId(input.WeightKg, sizeClassId);
+            var sizeCost = _helper.GetCostFromSize(sizeClassId);
+            var weightCost = _helper.GetCostFromWeight(input.WeightKg, sizeClassId);
+            var totalCost = sizeCost + weightCost;
             return new OutputParcel
             {
-                ParcelId = input.ParcelId, 
-                WidthCm = input.WidthCm, 
-                HeightCm = input.HeightCm, 
+                ParcelId = input.ParcelId,
+                WidthCm = input.WidthCm,
+                HeightCm = input.HeightCm,
                 LengthCm = input.LengthCm,
                 WeightKg = input.WeightKg,
-                ParcelSizeId = size,
-                Cost = totalCost,
-                IsExtraHeavy = isExtraHeavy
+                ParcelSizeClassId = sizeClassId,
+                ParcelWeightClassId = weightClassId, 
+                SizeCost = sizeCost,
+                WeightCost = weightCost,
+                TotalCost = totalCost
             };
         }
-
-
     }
 }

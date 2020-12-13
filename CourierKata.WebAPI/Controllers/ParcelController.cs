@@ -15,9 +15,9 @@ namespace CourierKata.WebAPI.Controllers
     [Route("[controller]")]
     public class ParcelController : ControllerBase, IParcelController
     {
-        private readonly IParcelService _service;
+        private readonly IShippingService _service;
 
-        public ParcelController(IParcelService service)
+        public ParcelController(IShippingService service)
         {
             _service = service;
         }

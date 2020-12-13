@@ -10,6 +10,6 @@ namespace CourierKata.WebAPI.Models
         [Required]
         public InputParcel[] Parcels { get; set; }
         [Required]
-        public bool IncludeSpeedyShipping { get; set; }
+        public CourierSpeedClassEnum CourierSpeedClassId { get; set; }
     }
 }

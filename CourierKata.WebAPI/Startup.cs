@@ -35,6 +35,7 @@ namespace CourierKata.WebAPI
 
             services.AddSingleton(typeof(IParcelHelper), typeof(ParcelHelper));
             services.AddSingleton(typeof(IParcelService), typeof(ParcelService));
+            services.AddSingleton(typeof(IShippingService), typeof(ShippingService));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
