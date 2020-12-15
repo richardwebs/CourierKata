@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourierKata.WebAPI", "CourierKata.WebAPI\CourierKata.WebAPI.csproj", "{17B94B82-2F34-453F-B311-30B7AA1BBB03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourierKata.WebAPI", "CourierKata.WebAPI\CourierKata.WebAPI.csproj", "{17B94B82-2F34-453F-B311-30B7AA1BBB03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourierKata.WebAPI.UnitTests", "..\CourierKata.WebAPI.UnitTests\CourierKata.WebAPI.UnitTests.csproj", "{76FDC7B4-506E-4552-96F8-63FEE17BEBC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourierKata.WebAPI.UnitTests", "CourierKata.WebAPI.UnitTests\CourierKata.WebAPI.UnitTests.csproj", "{3AC69799-40C2-44A1-BA92-8764AF9684CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{17B94B82-2F34-453F-B311-30B7AA1BBB03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17B94B82-2F34-453F-B311-30B7AA1BBB03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17B94B82-2F34-453F-B311-30B7AA1BBB03}.Release|Any CPU.Build.0 = Release|Any CPU
-		{76FDC7B4-506E-4552-96F8-63FEE17BEBC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{76FDC7B4-506E-4552-96F8-63FEE17BEBC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{76FDC7B4-506E-4552-96F8-63FEE17BEBC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{76FDC7B4-506E-4552-96F8-63FEE17BEBC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AC69799-40C2-44A1-BA92-8764AF9684CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AC69799-40C2-44A1-BA92-8764AF9684CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AC69799-40C2-44A1-BA92-8764AF9684CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AC69799-40C2-44A1-BA92-8764AF9684CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
